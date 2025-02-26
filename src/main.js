@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import './plugins/element.js'
+// import './plugins/element.js'
 import installElementPlus from './plugins/element'
+// 导入全局样式表
+import './assets/css/global.css'
 
 const app = createApp(App)
 installElementPlus(app)
