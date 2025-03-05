@@ -12,24 +12,27 @@
     <el-container>
       <!-- 侧边栏 -->
       <el-aside width="200px">
+        <div class="toggle-button" @click="toggleCollpse">|||</div>
         <!-- 侧边栏菜单区 -->
-        <el-menu background-color="#313743" text-color="#fff"  active-text-color="#ffd04b">
+        <el-menu background-color="#313743" text-color="#fff"
+        active-text-color="#02a0ff" unique-opened  :collapse="true">
           <!-- 一级菜单 -->
-          <el-submenu index="1">
+          <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单的模板区域 -->
           <template v-slot:title>
             <!-- 图标 -->
-            <i class="el-icon-location"></i>
+            <i :class="iconObjec[+item.id]"></i>
             <!-- 文本 -->
-            <span>导航一</span>
+            <span>{{ item.authName }}</span>
           </template>
           <!-- 二级菜单 -->
-          <el-menu-item index="1-4-1">
+          <el-menu-item :index="subItem.id + ''" v-for="subItem in item.children"
+          :key="subItem">
             <template v-slot:title>
             <!-- 图标 -->
-            <i class="el-icon-location"></i>
+            <i class="el-icon-menu"></i>
             <!-- 文本 -->
-            <span>导航一</span>
+            <span>{{ subItem.authName }}</span>
           </template>
           </el-menu-item>
         </el-submenu>
@@ -47,7 +50,14 @@ export default {
   data () {
     return {
       // 左侧菜单数据
-      menuList: []
+      menuList: [],
+      iconObjec: {
+        125: 'iconfont icon-user',
+        103: 'iconfont icon-tijikongjian',
+        101: 'iconfont icon-shangpin',
+        102: 'iconfont icon-danju',
+        145: 'iconfont icon-baobiao'
+      }
     }
   },
   created () {
@@ -63,12 +73,18 @@ export default {
     // 获取所有的菜单
     async getMenuList () {
       const { data: res } = await this.$http.get('menus')
-      console.log(res)
+      // console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.mesg)
-      // this.menuList = res.data
+      this.menuList = res.data
+      console.log(this.menuList)
+    },
+    // 点击按钮，切换
+    toggleCollpse () {
+
     }
   }
 }
+
 </script>
 
 <style lang="less" scoped>
@@ -94,8 +110,23 @@ export default {
 }
 .el-aside{
   background-color: #313743;
+  .el-menu{
+    border-right: none;
+  }
 }
 .el-main{
   background-color: #e9edf1;
+}
+.iconfont{
+  margin-right: 10px;
+}
+.toggle-button{
+  background-color: #4A5064;
+  font-size: 10px;
+  line-height: 24px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 0.2em;
+  cursor: pointer;
 }
 </style>
