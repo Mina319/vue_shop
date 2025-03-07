@@ -14,8 +14,7 @@
       <el-aside width= "200px" >
         <!-- 侧边栏菜单区 -->
         <el-menu background-color="#313743" text-color="#fff"
-        active-text-color="#02a0ff" unique-opened
-        >
+        active-text-color="#02a0ff" unique-opened router >
           <!-- 一级菜单 -->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单的模板区域 -->
@@ -26,7 +25,7 @@
             <span>{{ item.authName }}</span>
           </template>
           <!-- 二级菜单 -->
-          <el-menu-item :index="subItem.id + ''" v-for="subItem in item.children"
+          <el-menu-item :index="'/' + subItem.path + ''" v-for="subItem in item.children"
           :key="subItem">
             <template v-slot:title>
             <!-- 图标 -->
