@@ -11,11 +11,11 @@
     <!-- 页面主体区域 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="200px">
-        <div class="toggle-button" @click="toggleCollpse">|||</div>
+      <el-aside width= "200px" >
         <!-- 侧边栏菜单区 -->
         <el-menu background-color="#313743" text-color="#fff"
-        active-text-color="#02a0ff" unique-opened  :collapse="true">
+        active-text-color="#02a0ff" unique-opened
+        >
           <!-- 一级菜单 -->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单的模板区域 -->
@@ -39,13 +39,17 @@
     </el-menu>
       </el-aside>
       <!-- 右侧内容主体 -->
-      <el-main>Main
+      <el-main>
+        <!-- 路由占位符 -->
+         <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
+import { onUnmounted } from 'vue'
+
 export default {
   data () {
     return {
@@ -58,6 +62,8 @@ export default {
         102: 'iconfont icon-danju',
         145: 'iconfont icon-baobiao'
       }
+      // 是否折叠
+      // isCollapse: false
     }
   },
   created () {
@@ -75,13 +81,21 @@ export default {
       const { data: res } = await this.$http.get('menus')
       // console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.mesg)
-      this.menuList = res.data
-      console.log(this.menuList)
-    },
-    // 点击按钮，切换
-    toggleCollpse () {
-
+      this.menuList = res.data || []
+      // console.log(this.menuList)
     }
+    // 点击按钮，切换菜单的折叠与展开
+    // toggleCollpse () {
+    //   this.isCollapse = !this.isCollapse
+    //   console.log(this.isCollapse)
+    // },
+
+  },
+  setup () {
+    onUnmounted(() => {
+      console.log('Component unmounted')
+      // 清理逻辑
+    })
   }
 }
 

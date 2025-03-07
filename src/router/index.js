@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '@/components/Home.vue'
+import Welcome from '@/components/Welcome.vue'
 
 // 路由规则
 const routes = [
@@ -14,7 +15,11 @@ const routes = [
   },
   {
     path: '/home',
-    component: Home
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }
+    ]
   }
 ]
 
@@ -38,4 +43,5 @@ router.beforeEach((to, from, next) => {
   if (!tokenStr) return next('/login')
   next()
 })
+
 export default router
