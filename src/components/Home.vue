@@ -14,7 +14,7 @@
       <el-aside width= "200px" >
         <!-- 侧边栏菜单区 -->
         <el-menu background-color="#313743" text-color="#fff"
-        active-text-color="#02a0ff" unique-opened router >
+        active-text-color="#02a0ff" unique-opened router :default-active="activePath" >
           <!-- 一级菜单 -->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!-- 一级菜单的模板区域 -->
@@ -26,7 +26,7 @@
           </template>
           <!-- 二级菜单 -->
           <el-menu-item :index="'/' + subItem.path + ''" v-for="subItem in item.children"
-          :key="subItem">
+          :key="subItem" @click="saveNavState('/' + subItem.path)">
             <template v-slot:title>
             <!-- 图标 -->
             <i class="el-icon-menu"></i>
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { onUnmounted } from 'vue'
 
 export default {
   data () {
@@ -60,13 +59,16 @@ export default {
         101: 'iconfont icon-shangpin',
         102: 'iconfont icon-danju',
         145: 'iconfont icon-baobiao'
-      }
+      },
       // 是否折叠
       // isCollapse: false
+      // 被激活的链接地址
+      activePath: ''
     }
   },
   created () {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath') || ''
   },
   methods: {
     logout () {
@@ -82,19 +84,18 @@ export default {
       if (res.meta.status !== 200) return this.$message.error(res.meta.mesg)
       this.menuList = res.data || []
       // console.log(this.menuList)
-    }
+    },
     // 点击按钮，切换菜单的折叠与展开
     // toggleCollpse () {
     //   this.isCollapse = !this.isCollapse
     //   console.log(this.isCollapse)
     // },
+    // 保存链接的激活状态
+    saveNavState (activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
+    }
 
-  },
-  setup () {
-    onUnmounted(() => {
-      console.log('Component unmounted')
-      // 清理逻辑
-    })
   }
 }
 
